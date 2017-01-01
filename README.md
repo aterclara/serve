@@ -9,7 +9,7 @@ Add to a bin directory found in the PATH envar e.g. ~/.local/bin
 
 Make it executable
 ```bash
-chmod +x serve
+chmod +x /path/to/serve
 ```
 
 ## Usage
