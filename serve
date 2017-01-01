@@ -1,0 +1,36 @@
+#!/usr/bin/env python
+# start up a http server and serve files from a given directory on a given port
+# usage: ./httpserver dir port
+# Lessons learnt: how to create a clean close via crtl+c
+
+import SimpleHTTPServer
+import SocketServer
+import argparse
+import socket
+import os
+
+# defaults
+DIR  = os.getcwd()
+HOST = socket.gethostbyname(socket.gethostname())
+PORT = 8088
+
+# Get args
+parser = argparse.ArgumentParser(description='Start up a http server')
+parser.add_argument('dir',  nargs='?', default=DIR,            
+                    help='defaults to current dir {}'.format(DIR))
+parser.add_argument('port', nargs='?', default=PORT, type=int, 
+                    help='defaults to port {}'.format(PORT))
+
+args = parser.parse_args()
+os.chdir(args.dir)
+
+Handler = SimpleHTTPServer.SimpleHTTPRequestHandler
+httpd   = SocketServer.TCPServer((HOST, args.port), Handler)
+print "{}:{}".format(HOST,args.port)
+
+try:
+    httpd.serve_forever()
+except KeyboardInterrupt:
+    httpd.shutdown()
+    httpd.server_close()
+
